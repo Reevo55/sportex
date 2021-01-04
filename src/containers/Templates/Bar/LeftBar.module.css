@@ -1,0 +1,6 @@
+.Bar {
+    display: flex;
+    flex-direction: column;
+    background-color: #2D2D2D;
+
+}

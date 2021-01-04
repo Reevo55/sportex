@@ -1,0 +1,59 @@
+.Item {
+    width: 80%;
+    height: 25%;
+    border: 2px solid white;
+    margin: 8px 8px;
+    padding: 8px 4px;
+    color: white;
+    position: relative;
+}
+
+.Img {
+    width: 30%;
+    height: 100%;
+    object-fit: cover;
+    display: inline-block;
+}
+
+.RightCont {
+    width: 70%;
+    display: inline-block;
+}
+
+.FirstRow {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 10%;
+}
+
+.Title {
+    color: #39E991;
+    margin: 0;
+    font-weight: 300;
+    font-size: 2rem;
+    margin-left: 1rem;
+}
+
+.Price {
+    font-size: 2rem;
+    margin: 0;
+    margin-left: 2rem;
+}
+
+.Desc {
+    margin: 1rem;
+    position: absolute;
+    top: 30%;
+}
+
+.Inputs {
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+}
+
+.InputQuantity {
+    margin-right: 2rem;
+    font-size: 1.5rem;
+}

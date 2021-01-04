@@ -1,0 +1,16 @@
+.Link {
+    color: #39E991;
+    border: 2px solid white;
+    padding: 1.5rem 5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    transition: all .3s ease;
+    text-align: center;
+}
+
+.Link:hover {
+    background-color: white;
+}

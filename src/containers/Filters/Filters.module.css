@@ -1,0 +1,16 @@
+.FilterContainer {
+    background: #242424;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.MarginTop {
+    margin-top: 2rem;
+}
+
+.Buttons {
+    margin-bottom: 2rem;
+}

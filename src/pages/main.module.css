@@ -1,0 +1,23 @@
+.Main {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../res/img/main-background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.Container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+}
+
+.Link {
+    margin-top: 3rem;
+}

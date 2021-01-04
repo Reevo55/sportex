@@ -1,0 +1,22 @@
+.Button {
+    min-width: 80px;
+    min-height: 30px;
+    color: white;
+    background: transparent;
+    border: 1px solid white;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    padding: 1rem 3rem;
+    transition: all .1s ease;
+}
+
+.Button:hover, .Button:link {
+    border: 1px solid  #39E991;
+}
+
+.Button:active {
+    border: 1px solid white;
+    background: white;
+    color:  #39E991;
+}

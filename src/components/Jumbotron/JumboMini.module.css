@@ -1,0 +1,17 @@
+.Jumbo {
+    background-image: url('../../res/img/background-jambo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 15rem;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+
+}
+
+.Quote {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+}

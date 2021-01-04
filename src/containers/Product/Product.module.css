@@ -1,0 +1,58 @@
+.MainContainer {
+    background: #2B2B2B;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    height: 30rem;
+}
+
+.LeftContainer {
+    width: 40%;
+    height: 100%;
+}
+
+.RightContainer {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Title {
+    margin: 0;
+    color: #39E991;
+    font-weight: 300;
+    font-size: 3rem;
+}
+
+.Opinion {
+    color: white;
+}
+
+.Price {
+    color: white;
+    font-weight: 300;
+    font-size: 3rem;
+}
+
+.Img {
+    width: 95%;
+    height: 80%;
+    object-fit: cover;
+    margin-top: 1rem;
+}
+
+.DescContainer {
+    width: 70%;
+    margin: auto;
+}
+
+.DescTitle {
+    font-size: 3rem;
+}
+
+.Desc {
+    font-size: 1.5rem;
+}

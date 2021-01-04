@@ -1,0 +1,18 @@
+.Input {
+    width: 50%;
+    height: 2rem;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border: 1px solid white;
+    text-align: center;
+    padding: 1rem 0rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.Input::placeholder {
+    color: #39E991;
+    font-weight: 200;
+    font-size: 1.5rem;
+    text-align: center;
+}

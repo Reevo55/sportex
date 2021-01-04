@@ -1,0 +1,19 @@
+.Container {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+}
+
+.LeftContainer {
+    width: 15%;
+    margin-left: 2rem;
+    position: relative;
+    max-width: 1000px;
+}
+
+.RightContainer {
+    width: 80%;
+    height: 100%;
+    background-color: white;
+    margin-left: 2rem;
+}

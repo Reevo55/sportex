@@ -1,0 +1,37 @@
+.Title {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 2rem;
+    color: #39E991;
+    text-align: center;
+}
+
+.CategoriesList {
+    list-style: none;
+
+}
+
+.Categories {
+    margin: 1rem;
+    width: 100%;
+    min-height: 60%;
+}
+
+.Button {
+    color: white;
+    outline: none;
+}
+
+.Button:active {
+    background: #39E991;
+}
+
+.CatItem {
+    margin-left: 1rem;
+    color: white;
+}
+
+.ListItem {
+    margin-top: 1rem;
+}

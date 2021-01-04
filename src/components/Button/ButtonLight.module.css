@@ -1,0 +1,20 @@
+.ButtonLight {
+    min-width: 230px;
+    min-height: 60px;
+    color: #39E991;
+    background: transparent;
+    border: 1px solid white;
+    cursor: pointer;
+    outline: none;
+    padding: 1rem 3rem;
+    transition: all .1s ease;
+}
+
+.ButtonLight:hover, .ButtonLight:link {
+    border: 1px solid  #39E991;
+}
+
+.ButtonLight:active {
+    border: 1px solid white;
+    background: white;
+}

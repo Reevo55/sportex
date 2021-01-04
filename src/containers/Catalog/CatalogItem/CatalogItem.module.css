@@ -1,0 +1,59 @@
+.Item {
+    background: #252525;
+    width: 30%;
+    max-width: 35rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+    display: inline-block;
+    color: white;
+
+    cursor: pointer;
+}
+
+.Img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+}
+
+.Title {
+    color: #39E991;
+    height: 10%;
+    margin: 0;
+    padding: 1rem;
+    font-weight: 300;
+}
+
+.FirstRow > * {
+    display: inline-block;
+    height: 15%;
+}
+
+.SecondRow  > * {
+    height: 15%;
+    display: inline-block;
+}
+
+.Desc {
+    width: 60%;
+    font-weight: 300;
+    text-align: center;
+}
+
+.Price {
+    width: 40%;
+    font-weight: 500;
+    text-align: center;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.Rating {
+    width: 50%;
+    text-align: center;
+}
+
+.ButtonCont {
+    width: 50%;
+    text-align: center;
+}
