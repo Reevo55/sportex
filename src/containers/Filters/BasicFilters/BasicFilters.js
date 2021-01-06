@@ -1,31 +1,26 @@
 import React from 'react'
 import style from './BasicFilters.module.css'
 
-function BasicFilters() {
+function BasicFilters(props) {
+
+    const handleCatList = () => {
+        return props.categories.map((cat, index) => {
+            return (
+                <li className={style.ListItem} key={index}>
+                    <button className={style.Button} onClick={() => props.onclick(index)}>&nbsp;</button>
+                    <span className={style.CatItem}>Obuwie</span>
+                </li>
+            )
+        })
+    }
+
     return (
         <div className={style.Categories}>
             <h2 className={style.Title}>Kategorie</h2>
             <ul className={style.CategoriesList}>
-                <li className={style.ListItem}>
-                    <button className={style.Button}>&nbsp;</button>
-                    <span className={style.CatItem}>Obuwie</span>
-                </li>
-                <li className={style.ListItem}>
-                    <button className={style.Button}>&nbsp;</button>
-                    <span className={style.CatItem}>Obuwie</span>
-                </li>
-                <li className={style.ListItem}>
-                    <button className={style.Button}>&nbsp;</button>
-                    <span className={style.CatItem}>Obuwie</span>
-                </li>
-                <li className={style.ListItem}>
-                    <button className={style.Button}>&nbsp;</button>
-                    <span className={style.CatItem}>Obuwie</span>
-                </li>
-                <li className={style.ListItem}>
-                    <button className={style.Button}>&nbsp;</button>
-                    <span className={style.CatItem}>Obuwie</span>
-                </li>
+                {
+                    handleCatList()
+                }
             </ul>
         </div>
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './CategorySelection.module.css'
 import CatItem from '../../../components/CategoryItem/CategoryItem';
 import { useHistory } from 'react-router-dom';

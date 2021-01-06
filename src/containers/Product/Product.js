@@ -1,11 +1,14 @@
 import React from 'react'
 import ButtonLight from '../../components/Button/ButtonLight'
 import style from './Product.module.css'
+import { FaBackspace } from "react-icons/fa";
 
 function Product(props) {
     return (
         <>
+
             <div className={style.MainContainer}>
+                <h1 className={style.GoBack} onClick={props.onclick}><FaBackspace /></h1>
                 <div className={style.LeftContainer}>
                     <h1 className={style.Title}>{props.title}</h1>
                     <img src={props.img} className={style.Img}></img>

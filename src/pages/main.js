@@ -8,7 +8,8 @@ function Main() {
         <section className={style.Main}>
             <div className={style.Container}>
                 <img src={logo}></img>
-                <Link style={style.Link} to="/kategorie">Katalog</Link>
+                <Link style={style.LinkFirst} to="/katalog">Katalog</Link>
+                <Link style={style.Link} to="/kategorie">Kategorie</Link>
             </div>
         </section>
     )

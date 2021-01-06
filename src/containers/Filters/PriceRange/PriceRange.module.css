@@ -18,21 +18,18 @@
     min-height: 60%;
 }
 
-.Button {
-    color: white;
-    outline: none;
-}
-
-.Button:active, .Button:focus {
-    background: #39E991;
-    outline: none;
-}
-
-.FilterItem {
-    margin-left: 1rem;
-    color: white;
-}
-
 .ListItem {
+    margin-top: 1rem;
+}
+
+.InputContainer {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.InputDiv {
+    text-align: center;
     margin-top: 1rem;
 }

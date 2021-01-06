@@ -23,8 +23,9 @@
     outline: none;
 }
 
-.Button:active {
+.Button:active, .Button:focus {
     background: #39E991;
+    outline: none;
 }
 
 .CatItem {
