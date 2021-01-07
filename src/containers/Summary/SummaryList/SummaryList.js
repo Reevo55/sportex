@@ -33,7 +33,7 @@ function SummaryList(props) {
                 <ButtonLight onclick={props.onclickBack}>ANULUJ</ButtonLight>
                 <ButtonLight onclick={props.onclickNext}>DALEJ</ButtonLight>
 
-                <p>Cena całkowita: <span className={style.WholePrice}>1999zł</span>  + dostawa</p>
+                <p>Cena całkowita: <span className={style.WholePrice}>{props.totalPrice}zł</span>  + dostawa</p>
             </div>
         </>
     )

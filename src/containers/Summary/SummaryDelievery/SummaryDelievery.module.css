@@ -1,0 +1,33 @@
+.Title {
+    color: white;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 300;
+    margin-top: 0;
+}
+.List {
+    height: 60%;
+    overflow: auto;
+}
+.Summary {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: #2D2D2D;
+    padding: 2rem 0rem;
+    margin-top: 2rem;
+    color: white;
+}
+.WholePrice {
+    font-size: 2rem;
+}
+
+.Input {
+    width: 50;
+}
+
+
+.Label {
+    font-size: 2rem;
+    color: white;
+}

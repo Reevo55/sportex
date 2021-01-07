@@ -3,35 +3,117 @@ import style from './Summary.module.css'
 import SummaryList from './SummaryList/SummaryList'
 import SummaryInfo from './SummaryInfo/SummaryInfo'
 import { useHistory } from 'react-router-dom';
+import SummaryDelievery from './SummaryDelievery/SummaryDelievery';
+import SummaryPayment from './summaryPayment/SummaryPayment';
+import SummarySum from './SummarySum/SummarySum';
 
 function Summary() {
     const components = ['summaryList', 'summaryInfo', 'summaryDelivery', 'summaryPayment', 'summarySum'];
-    let index = 0;
-    const [currentSummary, setCurrentSummary] = useState(components[index])
+    const [index, setIndex] = useState(0)
     const history = useHistory()
 
+    const [delievery, setDelievery] = useState({
+        firstname: '',
+        surname: '',
+        adress: '',
+        postal: '',
+        city: '',
+        tel: ''
+    })
 
-    const summaryNextButton = () => {
-        if(index < components.length - 1) index++;
-        setCurrentSummary(components[index])
+    const [delieveryType, setDelieveryType] = useState('DPD');
+    const [paymentType, setPaymentType] = useState('BLIK');
+    
+    const summaryNextButton = (e) => {
+        e.preventDefault()
+        let i = index;
+        console.log(i)
+        if (i < components.length - 1) {
+            i++;
+        }
+        setIndex(i)
     }
-    const summaryBackButton = () => {
-        index--;
-        if(index < 0) index = 0;
-        setCurrentSummary(components[index])
+    const summaryBackButton = (e) => {
+        e.preventDefault()
+        let i = index;
+        console.log(i)
+        if (i > 0) {
+            i--;
+        }
+        setIndex(i)
+    }
+
+    const delieveryHandler = (e) => {
+        console.log(e.target.value)
+
+        setDelieveryType(e.target.value)
+    }
+
+    const paymentHandler = (e) => {
+        console.log(e.target.value)
+
+        setPaymentType(e.target.value)
     }
 
     const firstBack = () => {
         history.goBack();
     }
-    
+
+    const calculatePrice = () => {
+        let sum = 0;
+        apiCart.lines.forEach(item => {
+            sum += item.quantity * item.product.price;
+        });
+
+        return sum;
+    }
+
+
     const summaryComponent = () => {
-        if(currentSummary === 'summaryList') {
-            return <SummaryList onclickNext={summaryNextButton} onclickBack={firstBack} cart={apiCart.lines}/>
+        if ( components[index] === 'summaryList') {
+            return <SummaryList onclickNext={summaryNextButton} onclickBack={firstBack} cart={apiCart.lines} totalPrice={calculatePrice()} />
         }
-        else if (currentSummary === 'summaryInfo') {
-            return <SummaryInfo onclickNext={summaryNextButton} onclickBack={summaryBackButton}/>
+        else if ( components[index] === 'summaryInfo') {
+            return <SummaryInfo
+                onclickNext={summaryNextButton}
+                onclickBack={summaryBackButton}
+                delieveryDetails={delievery}
+                onchange={handleInputChange}
+            />
         }
+        else if ( components[index] === 'summaryDelivery') {
+            return <SummaryDelievery
+                onclickNext={summaryNextButton}
+                onclickBack={summaryBackButton} 
+                delieveryHandler = {delieveryHandler}/>
+        }
+        else if ( components[index] === 'summaryPayment') {
+            return <SummaryPayment
+                onclickNext={summaryNextButton}
+                onclickBack={summaryBackButton} 
+                paymentHandler = {paymentHandler}/>
+        }
+        else if ( components[index] === 'summarySum') {
+            return <SummarySum 
+            onclickNext={summaryNextButton}
+            onclickBack={summaryBackButton} 
+            delieveryInfo={delievery}
+            delieveryType={delieveryType}
+            payment={paymentType}
+            totalPrice={calculatePrice()}/>
+        }
+        else return <h1>Something went wrong!</h1>
+    }
+
+    const handleInputChange = (e) => {
+        const deliev = { ...delievery }
+        const value = e.target.value
+        const name = e.target.name
+        deliev[name] = value
+        setDelievery(deliev)
+
+        console.log(name + " " + value)
+        console.log(delievery)
     }
 
     return (

@@ -1,0 +1,25 @@
+.Title {
+    color: white;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 300;
+    margin-top: 0;
+}
+
+.Summary {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: #2D2D2D;
+    padding: 2rem 0rem;
+    margin-top: 2rem;
+    color: white;
+}
+
+
+.Info {
+    color: white;
+    text-align: center;
+}
+
+
