@@ -1,0 +1,12 @@
+.Cart {
+    position: fixed;
+    width: 8vw;
+    right: 5%;
+    bottom: 5%;
+    transition: all .2 ease-out;
+    cursor: pointer;
+}
+
+.Cart:hover {
+    transform: scale(1.2);
+}

@@ -6,7 +6,7 @@ function Catalog(props) {
 
     const handleItems = () => {
         return props.items.map(item => {
-            return <CatItem key={item.id} item={item} onclick={props.onclick}/>
+            return <CatItem key={item.id} item={item} onclick={props.onclick} toCartClick={props.toCartClick}/>
         })
     }
 

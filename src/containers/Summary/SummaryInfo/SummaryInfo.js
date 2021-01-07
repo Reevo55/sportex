@@ -24,7 +24,6 @@ function SummaryInfo(props) {
             <div className={style.Summary}>
                 <ButtonLight onclick={props.onclickBack}>ANULUJ</ButtonLight>
                 <ButtonLight onclick={props.onclickNext}>DALEJ</ButtonLight>
-
             </div>
         </>
     )

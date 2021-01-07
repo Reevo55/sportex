@@ -19,11 +19,10 @@ function App() {
           <Catalog/>
         </Route>
 
-        <Route exact path="/katalog">
-          <Shop/>
+        <Route path="/katalog" component={Shop}>
         </Route>
 
-        <Route exact path="/kosz">
+        <Route exact path="/koszyk">
           <Basket/>
         </Route>
 

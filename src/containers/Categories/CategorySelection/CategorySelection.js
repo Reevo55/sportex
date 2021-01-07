@@ -3,27 +3,23 @@ import style from './CategorySelection.module.css'
 import CatItem from '../../../components/CategoryItem/CategoryItem';
 import { useHistory } from 'react-router-dom';
 
-function CategorySelection() {
+function CategorySelection(props) {
     const history = useHistory();
 
-    const categoryClickHandler = () => {
-
+    const categoryClickHandler = (catId) => {
         history.push({
-            pathname: "/katalog"
+            pathname: "/katalog",
+            search: `?cat=${catId}`
         })
-        //SET REDUX Kategoria aktualna
     }
 
     const categoriesHandler = () => {
-        console.log(categories)
-        return categories.map((elem, index) => {
+        return props.categories.map((elem) => {
             return (
-                <CatItem key={index} name={elem.name} img={elem.img} onclick={categoryClickHandler} />
+                <CatItem key={props.id} id={elem.categoryId} name={elem.name} img={elem.image} onclick={categoryClickHandler} />
             );
         })
     }
-
-
 
     return (
         <div className={style.SliderContainer}>

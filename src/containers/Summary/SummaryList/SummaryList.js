@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import style from './SummaryList.module.css';
 import ButtonLight from '../../../components/Button/ButtonLight'
 import Bar from '../../Templates/Bar/Bar'
@@ -6,16 +6,26 @@ import List from '../../Templates/Lists/List'
 import ListItem from '../../Templates/Lists/ListItem/ListItem'
 
 function SummaryList(props) {
+    const [products, setProducts] = useState(props.cart)
+
+    useEffect(() => {
+        //TODO fetch cart
+    }, [])
+
+    const handleListItems = () => {
+        return products.map(prod => {
+            return <ListItem key={prod.product.id} id={prod.product.id} title={prod.product.name} price={prod.product.price}
+                    desc={prod.product.description} img={prod.product.image} quantity={prod.quantity} mutable={false}/>
+        })
+    }
+
     return (
         <>
             <h1 className={style.Title}>Podsumowanie</h1>
 
             <div className={style.List}>
                 <List>
-                    <ListItem notMutable={true} />
-                    <ListItem notMutable={true} />
-                    <ListItem notMutable={true} />
-                    <ListItem notMutable={true} />
+                    {handleListItems()}
                 </List>
             </div>
 

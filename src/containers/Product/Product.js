@@ -2,6 +2,7 @@ import React from 'react'
 import ButtonLight from '../../components/Button/ButtonLight'
 import style from './Product.module.css'
 import { FaBackspace } from "react-icons/fa";
+import Img64 from '../../components/Img64/Img64';
 
 function Product(props) {
     return (
@@ -11,7 +12,7 @@ function Product(props) {
                 <h1 className={style.GoBack} onClick={props.onclick}><FaBackspace /></h1>
                 <div className={style.LeftContainer}>
                     <h1 className={style.Title}>{props.title}</h1>
-                    <img src={props.img} className={style.Img}></img>
+                    <Img64 data={props.img} style={style.Img}></Img64>
                 </div>
 
 
@@ -20,7 +21,7 @@ function Product(props) {
                     <h2 className={style.Price}>{props.price} zł</h2>
 
                     <div>
-                        <ButtonLight>DO KOSZYKA</ButtonLight>
+                        <ButtonLight onclick={(e, productId) => props.toCart(e, props.id)}>DO KOSZYKA</ButtonLight>
                     </div>
                 </div>
 

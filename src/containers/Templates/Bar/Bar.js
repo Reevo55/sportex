@@ -17,7 +17,7 @@ function Bar() {
                 <ButtonWhite>Dane</ButtonWhite>
                 <ButtonWhite>Kontakt</ButtonWhite>
 
-                <CLink>KATALOG</CLink>
+                <CLink to={'/katalog'}>KATALOG</CLink>
             </LeftBar>
         </div>
     )

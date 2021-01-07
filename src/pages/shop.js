@@ -7,13 +7,15 @@ import Product from '../containers/Product/Product';
 import axios from 'axios';
 
 import boots from '../res/img/boot.png';
+import ToCart from '../components/ToCart/ToCart';
 
-function Shop() {
+function Shop(props) {
     const [category, setCategory] = useState(0);
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(10000);
 
     const [productViewState, setProductViewState] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -22,19 +24,24 @@ function Shop() {
 
     const [pickedItem, setPickedItem] = useState({})
 
-    useEffect(()=> {
+    useEffect(() => {
         axios.get('api/Products/AllProducts').then(jres => {
             setProducts(jres.data);
             setFilteredProducts(jres.data);
-            setLoading(false);
-            console.log("Loading " + loading);
-            console.log(products);
+        })
+        axios.get('api/AllCategory').then(res => {
+            setCategories(res.data)
+            setLoading(false)
         })
     }, [])
 
     useEffect(() => {
-        console.log('filtered')
-    }, [filteredProducts])
+        if (props.location.search) {
+            const query = new URLSearchParams(props.location.search);
+            setCategory(query.get('cat'))
+            categoryFilterHandler(query.get('cat'))
+        }
+    }, [products])
 
     const itemClickHandler = (key) => {
         setPickedItem(products.find(item => item.id == key))
@@ -45,8 +52,17 @@ function Shop() {
         setProductViewState(false);
     }
 
-    const categoryClickHandler = (id) => {
-        console.log(id)
+    const addToCart = (e, productId) => {
+        e.cancelBubble = true;
+        e.stopPropagation();
+        console.log('to cart product: ' + productId)
+
+        // axios.post('https://localhost:44338/api/Cart/AddProduct/1' + productId);
+
+        alert("Product added!")
+    }
+
+    const categoryFilterHandler = (id) => {
         setCategory(id)
 
         setFilteredProducts(products.filter(product => product.category == id))
@@ -58,18 +74,18 @@ function Shop() {
         setFilteredProducts(products)
     }
 
-    const lowestPriceHandler= () => {
+    const lowestPriceHandler = () => {
         console.log('lowest price sort')
-        let sortedProducts = [...filteredProducts].sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
-        
-        setFilteredProducts(sortedProducts) 
+        let sortedProducts = [...filteredProducts].sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
+
+        setFilteredProducts(sortedProducts)
     }
 
     const highestPriceHandler = () => {
         console.log('highest price sort')
-        let sortedProducts = [...filteredProducts].sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
-        
-        setFilteredProducts(sortedProducts) 
+        let sortedProducts = [...filteredProducts].sort((a, b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
+
+        setFilteredProducts(sortedProducts)
     }
     const highestOpinion = () => {
         console.log('highest opinion sort')
@@ -93,19 +109,19 @@ function Shop() {
         return (
             <div className={style.Container}>
                 <div className={style.LeftContainer}>
-                    <Filters catOnClick={categoryClickHandler} 
-                        resetClick={resetFiltersHandler}  
-                        categories={[1,2,3,4]}
+                    <Filters catOnClick={categoryFilterHandler}
+                        resetClick={resetFiltersHandler}
+                        categories={categories}
                         onclickHighestPrice={highestPriceHandler}
                         onclickLowestPrice={lowestPriceHandler}
                         onclickHighestOpinion={highestOpinion}
                         onMaxChange={onMaxChangeHandler}
                         onMinChange={onMinChangeHandler}
                         max={maxPrice}
-                        min={minPrice}/>
+                        min={minPrice} />
                 </div>
                 <div className={style.RightContainer}>
-                    <Catalog onclick={itemClickHandler} items={filteredProducts} />
+                    <Catalog onclick={itemClickHandler} toCartClick={addToCart} items={filteredProducts} />
                 </div>
             </div>
         )
@@ -115,13 +131,15 @@ function Shop() {
         return (
             <div className={style.ProductView}>
 
-                <Product 
-                    title={pickedItem.name} 
+                <Product
+                    id={pickedItem.id}
+                    title={pickedItem.name}
                     price={pickedItem.price}
                     opinion={'9/10'}
-                    img={boots}
+                    img={pickedItem.image}
                     desc={pickedItem.description}
                     onclick={backToCatalogClick}
+                    toCart={addToCart}
                 />
             </div>
         )
@@ -130,7 +148,7 @@ function Shop() {
     const handleComponent = () => {
         let result;
 
-        if(loading) {
+        if (loading) {
             result = 'Loading...'
         }
         else {
@@ -144,8 +162,10 @@ function Shop() {
         <>
             <JumboMini />
             {
-               handleComponent()
+                handleComponent()
             }
+
+            <ToCart/>
         </>
     )
 }
