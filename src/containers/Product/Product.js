@@ -17,7 +17,7 @@ function Product(props) {
 
 
                 <div className={style.RightContainer}>
-                    <h3 className={style.Opinion}>Opinie: {props.opinion}</h3>
+                    <h3 className={style.Opinion}>Opinie: {props.grade} / 6</h3>
                     <h2 className={style.Price}>{props.price} zł</h2>
 
                     <div>

@@ -11,7 +11,7 @@ function Filters(props) {
             <AdvancedFilters 
                 highestPriceClick={props.onclickHighestPrice}
                 lowestPriceClick={props.onclickLowestPrice}
-                highestOpinionClick={props.onclickHighestOpinion}
+                highestGradeClick={props.onclickHighestGrade}
             />
             
             <BasicFilters onclick={props.catOnClick} categories={props.categories}/>

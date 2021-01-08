@@ -4,8 +4,6 @@ import style from './BasicFilters.module.css'
 function BasicFilters(props) {
 
     const handleCatList = () => {
-        console.log("lol")
-        console.log(props.categories)
         return props.categories.map((cat, index) => {
             return (
                 <li className={style.ListItem} key={index++}>

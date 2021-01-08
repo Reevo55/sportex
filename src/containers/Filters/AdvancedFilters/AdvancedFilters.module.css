@@ -21,6 +21,8 @@
 .Button {
     color: white;
     outline: none;
+    cursor: pointer;
+
 }
 
 .Button:active, .Button:focus {

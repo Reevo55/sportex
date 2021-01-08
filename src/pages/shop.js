@@ -8,21 +8,33 @@ import axios from 'axios';
 
 import boots from '../res/img/boot.png';
 import ToCart from '../components/ToCart/ToCart';
+import CLink from '../components/Link/CLink';
 
 function Shop(props) {
+    const [loading, setLoading] = useState(true)
+    
     const [category, setCategory] = useState(0);
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(10000);
 
     const [productViewState, setProductViewState] = useState(false);
     const [categories, setCategories] = useState([]);
 
     const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(true)
 
     const [filteredProducts, setFilteredProducts] = useState([])
 
     const [pickedItem, setPickedItem] = useState({})
+
+    const [filters, setFilters] = useState({
+        categories: false,
+        filters: false,
+        prices: {
+            min: false,
+            max: false
+        },
+        minPrice: 0,
+        maxPrice: 10000,
+        category: 0
+    })
 
     useEffect(() => {
         axios.get('api/Products/AllProducts').then(jres => {
@@ -43,6 +55,23 @@ function Shop(props) {
         }
     }, [products])
 
+    useEffect(() => {
+        console.log('Filtering...')
+        console.log(filters)
+        let toFilter = [...products];
+        if(filters.categories != false && filters.category != 0 ) toFilter = filters.categories(toFilter, filters.category)
+        if(filters.filters != false) toFilter = filters.filters(toFilter)
+        if(filters.prices.max != false) toFilter = filters.prices.max(toFilter, filters.maxPrice, filters.minPrice)
+        if(filters.prices.min != false) toFilter = filters.prices.min(toFilter, filters.maxPrice, filters.minPrice)
+
+        setFilteredProducts([...toFilter])
+    }, [filters])
+
+    useEffect(() => {
+        console.log('Teraz sie ustawiają nowe pofiltrowane produkty')
+        console.log(filteredProducts)
+    }, [filteredProducts])
+
     const itemClickHandler = (key) => {
         setPickedItem(products.find(item => item.id == key))
         setProductViewState(true);
@@ -55,7 +84,6 @@ function Shop(props) {
     const addToCart = (e, productId) => {
         e.cancelBubble = true;
         e.stopPropagation();
-        console.log('to cart product: ' + productId)
 
         // axios.post('https://localhost:44338/api/Cart/AddProduct/1' + productId);
 
@@ -64,45 +92,88 @@ function Shop(props) {
 
     const categoryFilterHandler = (id) => {
         setCategory(id)
-
-        setFilteredProducts(products.filter(product => product.category == id))
+        console.log("category: " + category)
+        const myFilters = { ...filters }
+        myFilters.categories = filterByCategory
+        myFilters.category = id
+        setFilters(myFilters)
     }
 
     const resetFiltersHandler = () => {
-        setMaxPrice(10000)
-        setMinPrice(1)
-        setFilteredProducts(products)
+        setFilteredProducts([...products])
+        setFilters({
+            categories: false,
+            filters: false,
+            prices: {
+                min: false,
+                max: false
+            },
+            minPrice: 0,
+            maxPrice: 10000,
+            category: 0
+        })
     }
 
     const lowestPriceHandler = () => {
-        console.log('lowest price sort')
-        let sortedProducts = [...filteredProducts].sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
-
-        setFilteredProducts(sortedProducts)
+        const myFilters = { ...filters }
+        myFilters.filters = sortByLowestPrice
+        setFilters(myFilters)
     }
 
     const highestPriceHandler = () => {
-        console.log('highest price sort')
-        let sortedProducts = [...filteredProducts].sort((a, b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
-
-        setFilteredProducts(sortedProducts)
+        const myFilters = { ...filters }
+        myFilters.filters = sortByHighestPrice
+        setFilters(myFilters)
     }
-    const highestOpinion = () => {
-        console.log('highest opinion sort')
+    const highestGradeHandler = () => {
+        const myFilters = { ...filters }
+        myFilters.filters = sortByHighestGrade
+        setFilters(myFilters)
     }
 
     const onMaxChangeHandler = (e) => {
         let maxP = e.target.value
 
-        setMaxPrice(maxP)
-        setFilteredProducts(products.filter(product => product.price <= maxP && product.price >= minPrice))
+        const myFilters = { ...filters }
+        myFilters.prices.max = filterByPriceMax
+        myFilters.maxPrice = maxP
+        
+        setFilters(myFilters)
     }
 
     const onMinChangeHandler = (e) => {
         let minP = e.target.value
 
-        setMinPrice(minP)
-        setFilteredProducts(products.filter(product => product.price >= minP && product.price <= maxPrice))
+        const myFilters = { ...filters }
+        myFilters.prices.min = filterByPriceMin
+        myFilters.minPrice = minP
+
+        setFilters(myFilters)
+    }
+
+    const filterByPriceMax = ( arr, maxPrice, minPrice ) => {
+        console.log(maxPrice)
+        console.log(minPrice)
+        return arr.filter(item => item.price <= maxPrice && item.price >= minPrice)
+    }
+    const filterByPriceMin = ( arr, maxPrice, minPrice ) => {
+        console.log(maxPrice)
+        console.log(minPrice)
+        return arr.filter(product => product.price >= minPrice && product.price <= maxPrice)
+    }
+    const sortByHighestPrice = ( arr ) => {
+        return arr.sort((a, b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
+    }
+    const sortByLowestPrice = ( arr ) => {
+        return arr.sort((a, b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
+    }
+    const sortByHighestGrade = ( arr ) => {
+        return arr.sort((a, b) => (a.grade > b.grade) ? -1 : ((b.grade > a.grade) ? 1 : 0))
+    }
+    const filterByCategory = ( arr, catId ) => {
+        console.log('In filtering')
+        console.log(catId)
+        return arr.filter(item => item.category == catId )
     }
 
     const catalogView = () => {
@@ -114,11 +185,11 @@ function Shop(props) {
                         categories={categories}
                         onclickHighestPrice={highestPriceHandler}
                         onclickLowestPrice={lowestPriceHandler}
-                        onclickHighestOpinion={highestOpinion}
+                        onclickHighestGrade={highestGradeHandler}
                         onMaxChange={onMaxChangeHandler}
                         onMinChange={onMinChangeHandler}
-                        max={maxPrice}
-                        min={minPrice} />
+                        max={filters.maxPrice}
+                        min={filters.minPrice} />
                 </div>
                 <div className={style.RightContainer}>
                     <Catalog onclick={itemClickHandler} toCartClick={addToCart} items={filteredProducts} />
@@ -140,6 +211,7 @@ function Shop(props) {
                     desc={pickedItem.description}
                     onclick={backToCatalogClick}
                     toCart={addToCart}
+                    grade={pickedItem.grade}
                 />
             </div>
         )
@@ -165,7 +237,7 @@ function Shop(props) {
                 handleComponent()
             }
 
-            <ToCart/>
+            <ToCart />
         </>
     )
 }

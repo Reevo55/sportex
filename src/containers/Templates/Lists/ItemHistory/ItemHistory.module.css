@@ -1,12 +1,13 @@
 .Item {
     width: 80%;
-    height: 12rem;
+    height: 10rem;
     border: 2px solid white;
     margin: 8px 8px;
     padding: 8px 4px;
     color: white;
     position: relative;
     display: flex;
+    overflow: hidden;
 }
 
 .Img {
@@ -40,17 +41,18 @@
 
 .Desc {
     margin: 1rem;
-    position: absolute;
-    top: 30%;
 }
 
-.Inputs {
+.OrderId {
+    margin: 1rem;
+}
+
+.OrderDate {
+    margin: 1rem
+}
+
+.InfoBtn {
     position: absolute;
-    right: 5%;
+    right: 1%;
     bottom: 5%;
-}
-
-.InputQuantity {
-    margin-right: 2rem;
-    font-size: 1.5rem;
 }

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import ButtonLight from '../../components/Button/ButtonSmall'
 import CLink from '../../components/Link/CLink'
 import Bar from '../Templates/Bar/Bar'
 import List from '../Templates/Lists/List'
@@ -17,7 +15,7 @@ function Basket() {
     const handleListItems = () => {
         return products.map(prod => {
             return <ListItem key={prod.product.id} id={prod.product.id} title={prod.product.name} price={prod.product.price}
-                    desc={prod.product.description} img={prod.product.image} quantity={prod.quantity}/>
+                    desc={prod.product.description} img={prod.product.image} quantity={prod.quantity} mutable={true}/>
         })
     }
 
@@ -113,7 +111,7 @@ const apiCart = {
                 "date": "2021-01-06T00:00:00",
                 "image": "aHR0cHM6Ly93b2xpbml1c3oucGwvcG9sX3BsX0J1dHktZG8tYmllZ2FuaWEtdy10ZXJlbmllLUFkaWRhcy1URVJSRVgtVFJBSUxNQUtFUi1CQjMzNTgtODg2XzIuanBn"
             },
-            "quantity": 1
+            "quantity": 2
         }
     ]
 }

@@ -6,6 +6,7 @@ import Catalog from "./pages/catalog";
 import Shop from "./pages/shop";
 import Basket from './pages/basket';
 import Summary from './pages/summary';
+import OrderHistory from './pages/orderHistory';
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route exact path="/podsumowanie">
           <Summary/>
         </Route>
+
+        <Route exact path="/historia" component={OrderHistory} />
 
       </BrowserRouter>
     </div>

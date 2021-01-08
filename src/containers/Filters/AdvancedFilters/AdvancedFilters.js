@@ -15,7 +15,7 @@ function AdvancedFilters(props) {
                     <span className={style.FilterItem}>od najniższej ceny</span>
                 </li>
                 <li className={style.ListItem}>
-                    <button className={style.Button} onClick={props.highestOpinionClick}>&nbsp;</button>
+                    <button className={style.Button} onClick={props.highestGradeClick}>&nbsp;</button>
                     <span className={style.FilterItem}>od najwyższej oceny</span>
                 </li>
             </ul>

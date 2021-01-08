@@ -17,8 +17,7 @@ function CatalogItem(props) {
             </div>
 
             <div className={style.SecondRow}>
-                <h4 className={style.Rating}></h4>
-                {/* <h4 className={style.Rating}> OCENA: 9/10 </h4> */}
+                <h4 className={style.Rating}> OCENA: {props.item.grade} / 6 </h4>
                 <div className={style.ButtonCont}>
                     <Button onclick={(e, productId) => props.toCartClick(e, props.item.id)}>DO KOSZYKA</Button>
                 </div>
