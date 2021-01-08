@@ -6,6 +6,9 @@ import { useHistory } from 'react-router-dom';
 import SummaryDelievery from './SummaryDelievery/SummaryDelievery';
 import SummaryPayment from './summaryPayment/SummaryPayment';
 import SummarySum from './SummarySum/SummarySum';
+import BasicModal from '../Templates/Modals/BasicModal';
+import ButtonLight from '../../components/Button/ButtonLight';
+import CLink from '../../components/Link/CLink';
 
 function Summary() {
     const components = ['summaryList', 'summaryInfo', 'summaryDelivery', 'summaryPayment', 'summarySum'];
@@ -23,7 +26,11 @@ function Summary() {
 
     const [delieveryType, setDelieveryType] = useState('DPD');
     const [paymentType, setPaymentType] = useState('BLIK');
-    
+
+    const [showModalResponse, setShowModalResponse] = useState(false)
+    const [showModalError, setShowModalError] = useState(false)
+    const [orderState, setOrderState] = useState('niepotwierdzone')
+
     const summaryNextButton = (e) => {
         e.preventDefault()
         let i = index;
@@ -68,39 +75,56 @@ function Summary() {
         return sum;
     }
 
+    const finalizeOrderBtnClick = () => {
+        //TODO wyslij date do serwera i ustaw jaki modal
+
+        setShowModalResponse(true)
+    }
+
+    const sumInfoNextClick = (e) => {
+        for(const prop in delievery) {
+            if(delievery[prop] === '') 
+            {
+                setShowModalError(true);
+                return false;
+            }
+        }
+        summaryNextButton(e)
+        return true;
+    }
 
     const summaryComponent = () => {
-        if ( components[index] === 'summaryList') {
+        if (components[index] === 'summaryList') {
             return <SummaryList onclickNext={summaryNextButton} onclickBack={firstBack} cart={apiCart.lines} totalPrice={calculatePrice()} />
         }
-        else if ( components[index] === 'summaryInfo') {
+        else if (components[index] === 'summaryInfo') {
             return <SummaryInfo
-                onclickNext={summaryNextButton}
+                onclickNext={sumInfoNextClick}
                 onclickBack={summaryBackButton}
                 delieveryDetails={delievery}
                 onchange={handleInputChange}
             />
         }
-        else if ( components[index] === 'summaryDelivery') {
+        else if (components[index] === 'summaryDelivery') {
             return <SummaryDelievery
                 onclickNext={summaryNextButton}
-                onclickBack={summaryBackButton} 
-                delieveryHandler = {delieveryHandler}/>
+                onclickBack={summaryBackButton}
+                delieveryHandler={delieveryHandler} />
         }
-        else if ( components[index] === 'summaryPayment') {
+        else if (components[index] === 'summaryPayment') {
             return <SummaryPayment
                 onclickNext={summaryNextButton}
-                onclickBack={summaryBackButton} 
-                paymentHandler = {paymentHandler}/>
+                onclickBack={summaryBackButton}
+                paymentHandler={paymentHandler} />
         }
-        else if ( components[index] === 'summarySum') {
-            return <SummarySum 
-            onclickNext={summaryNextButton}
-            onclickBack={summaryBackButton} 
-            delieveryInfo={delievery}
-            delieveryType={delieveryType}
-            payment={paymentType}
-            totalPrice={calculatePrice()}/>
+        else if (components[index] === 'summarySum') {
+            return <SummarySum
+                onclickNext={finalizeOrderBtnClick}
+                onclickBack={summaryBackButton}
+                delieveryInfo={delievery}
+                delieveryType={delieveryType}
+                payment={paymentType}
+                totalPrice={calculatePrice()} />
         }
         else return <h1>Something went wrong!</h1>
     }
@@ -116,10 +140,36 @@ function Summary() {
         console.log(delievery)
     }
 
+    const currentModal = () => {
+        if (orderState == 'niepotwierdzone') {
+            return (
+                <BasicModal title='Zamówienie niepotwierdzone!' text='Coś poszło nie tak, spróbuj ponownie później'>
+                    <CLink to='/koszyk'>MENU GŁÓWNE</CLink>
+                </BasicModal>
+            )
+        }
+        else if (orderState == 'potwierdzone') {
+            return (
+                <BasicModal title='Zamówienie potwierdzone!' text='Potwierdzenie zostało potwierdzone, pozostaje czekać na zamówienie!'>
+                    <CLink to='/'>MENU GŁÓWNE</CLink>
+                </BasicModal>)
+        }
+    }
+
     return (
-        <div className={style.MainContainer}>
-            {summaryComponent()}
-        </div>
+        <>
+            <div className={style.MainContainer}>
+                {summaryComponent()}
+            </div>
+
+            {showModalResponse && currentModal()}
+            {
+                showModalError && (
+                <BasicModal title='Informacje niepełne!' text='Uzupełnij wszystkie informacje!'>
+                    <ButtonLight onclick={() => setShowModalError(false)}>OK</ButtonLight>
+                </BasicModal>
+            )}
+        </>
     )
 }
 

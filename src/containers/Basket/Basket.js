@@ -30,6 +30,18 @@ function Basket() {
         return sum;
     }
 
+    const checkAmount = () => {
+        let success = true;
+
+        products.forEach(item => {
+            if(item.quantity > item.product.amount) {
+                success = false;
+            }
+        });
+
+        return success;
+    }
+
     return (
         <div className={style.MainContainer}>
             <Bar />
