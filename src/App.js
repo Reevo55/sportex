@@ -7,6 +7,7 @@ import Shop from "./pages/shop";
 import Basket from './pages/basket';
 import Summary from './pages/summary';
 import OrderHistory from './pages/orderHistory';
+import Employee from './pages/employee';
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
         </Route>
 
         <Route exact path="/historia" component={OrderHistory} />
+
+        <Route exact path="/pracownik" component={Employee} />
 
       </BrowserRouter>
     </div>

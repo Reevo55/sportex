@@ -6,25 +6,26 @@ import ListItem from '../../Templates/Lists/ListItem/ListItem'
 import ListInput from '../../Templates/Lists/ListInput/ListInput';
 
 function SummaryPayment(props) {
+    const handlePaymentTypes = () => {
+        console.log(props.paymentTypes)
+        return props.paymentTypes.map(element => {
+            return (
+                <div className={style.InputContainer}>
+                    <input key={element.Id} className={style.Input} type='radio' id='payment' name='payment' value={element.Name} onClick={props.paymentHandler} defaultChecked></input>
+                    <label className={style.Label} htmlFor='payment'>{element.Name}</label>
+                </div>
+            )
+        });
+    }
+
     return (
         <form>
             <h1 className={style.Title}>Wprowadź rodzaj dostawy</h1>
 
             <div className={style.List}>
                 <List>
-                    <fieldset onChange={props.paymentHandler}>
-                        <div className={style.InputContainer}>
-                            <input  className={style.Input} type='radio' id='payment' name='payment' value='BLIK' defaultChecked></input>
-                            <label   className={style.Label} htmlFor='payment'>BLIK</label>
-                        </div>
-                        <div className={style.InputContainer}>
-                            <input className={style.Input} type='radio' id='payment' name='payment' value='przelew'></input>
-                            <label className={style.Label} htmlFor='payment'>Przelew</label>
-                        </div>
-                        <div className={style.InputContainer}>
-                            <input className={style.Input} type='radio' id='payment' name='payment' value='pobranie'></input>
-                            <label className={style.Label} htmlFor='payment'>Za pobraniem</label>
-                        </div>
+                    <fieldset >
+                        {handlePaymentTypes()}
                     </fieldset>
                 </List>
             </div>

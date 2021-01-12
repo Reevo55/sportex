@@ -1,5 +1,6 @@
 .Modal {
-    padding: 4rem 20rem;
+    padding: 4rem 5rem;
+    width: 50%;
     position: fixed;
     left: 50%;
     top: 50%;
@@ -14,10 +15,10 @@
 
 .Background {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    
-    background-color: rgba(0, 0, 0, 0.507);
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+        
 }
 
 

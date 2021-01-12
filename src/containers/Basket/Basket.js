@@ -1,41 +1,102 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import ButtonLight from '../../components/Button/ButtonSmall'
+import ButtonWhite from '../../components/Button/ButtonWhite'
 import CLink from '../../components/Link/CLink'
+import Loading from '../../components/Loading/Loading'
 import Bar from '../Templates/Bar/Bar'
 import List from '../Templates/Lists/List'
 import ListItem from '../Templates/Lists/ListItem/ListItem'
+import BasicModal from '../Templates/Modals/BasicModal'
 import style from './Basket.module.css'
 
+
 function Basket() {
-    const [products, setProducts] = useState(apiCart.lines)
+    const [products, setProducts] = useState(false)
+    const [showAmountModal, setShowAmountModal] = useState(false);
+    const [showEmptyModal, setShowEmptyModal] = useState(false);
+    const [loading, setLoading] = useState(true)
+
+    const history = useHistory()
+
+    const toSummary = () => {
+        if (checkAmount() && !isEmpty()) {
+            history.push({
+                pathname: '/podsumowanie'
+            })
+        }
+    }
 
     useEffect(() => {
-        //TODO fetch cart
+        fetchProducts()
     }, [])
 
+    useEffect(() => {
+    }, [products])
+
     const handleListItems = () => {
-        return products.map(prod => {
-            return <ListItem key={prod.product.id} id={prod.product.id} title={prod.product.name} price={prod.product.price}
-                    desc={prod.product.description} img={prod.product.image} quantity={prod.quantity} mutable={true}/>
+        if (products) {
+            return products.map(prod => {
+                return <ListItem key={prod.product.id} id={prod.product.id} title={prod.product.name} price={prod.product.price}
+                    desc={prod.product.description} img={prod.product.image} quantity={prod.quantity} mutable={true} removeWholeItem={removeWholeItem}
+                    checkAmount={checkAmount} maxQuantity={prod.product.amount} fetchProducts={fetchProducts} setProducts={setProducts}/>
+            })
+        }
+    }
+
+    const isEmpty = () => {
+        if(products.length == 0) {
+            setShowEmptyModal(true)
+            return true;
+        }
+        else return false;
+    }
+
+    const fetchProducts = () => {
+        axios.get('https://localhost:44338/api/Cart/AllCart').then(res => {
+            setProducts(res.data.lines);
+            setLoading(false)
+            console.log(res.data.lines)
         })
     }
 
     const calculatePrice = () => {
         let sum = 0;
-        products.forEach(item => {
-            sum += item.quantity * item.product.price;
-        });
+
+        if (products) {
+            products.forEach(item => {
+                sum += item.quantity * item.product.price;
+            });
+        }
 
         return sum;
+    }
+
+    const removeWholeItem = (id) => {
+        console.log(id)
+        let data = '';
+        axios.delete(`api/Cart/RemoveProduct/${id}`).then(res => {
+            data = res.data.lines
+            setProducts(data)
+        })
     }
 
     const checkAmount = () => {
         let success = true;
 
-        products.forEach(item => {
-            if(item.quantity > item.product.amount) {
-                success = false;
-            }
-        });
+        if (products) {
+            console.log('hello here')
+            products.forEach(item => {
+                if (parseInt(item.quantity) > parseInt(item.product.amount)) {
+                    success = false;
+                    console.log('hello false')
+                }
+            });
+        }
+
+        console.log(success)
+        setShowAmountModal(!success)
 
         return success;
     }
@@ -49,71 +110,37 @@ function Basket() {
 
                 <div className={style.List}>
                     <List>
-                        {handleListItems()}
+                        {
+                            loading
+                                ?
+                                <Loading />
+                                :
+                                handleListItems()
+                        }
                     </List>
                 </div>
 
                 <div className={style.Summary}>
-                    <CLink to='/podsumowanie'>Złóż zamówienie</CLink>
+                    <ButtonLight onclick={toSummary}>Złóż zamówienie</ButtonLight>
 
-                    <p>Cena całkowita: <span className={style.WholePrice}>{calculatePrice()}zł</span>  + dostawa</p>
+                    <p>Cena całkowita: <span className={style.WholePrice}>{calculatePrice().toFixed(2)}zł</span>  + dostawa</p>
                 </div>
             </div>
+
+            {showAmountModal ?
+                <BasicModal  title={'Błędna liczba produktów!'} text={'Proszę zmieścić się w ilości maksymalnej'} >
+                    <ButtonLight onclick={() => setShowAmountModal(false)}>OK</ButtonLight>
+                </BasicModal>
+                : null
+            }
+            {showEmptyModal ?
+                <BasicModal  title={'Koszyk pusty!'} text={'Proszę umieścić coś w koszyku...'} >
+                    <ButtonLight onclick={() => setShowEmptyModal(false)}>OK</ButtonLight>
+                </BasicModal>
+                : null
+            }
         </div>
     )
-}
-
-const apiCart = {
-    "lines": [
-        {
-            "cartLineId": 0,
-            "product": {
-                "id": 1,
-                "category": 2,
-                "name": "Okulary do pływania",
-                "price": 7.89,
-                "amount": "34",
-                "description": "Na basen",
-                "code": "55555s",
-                "grade": 3.5,
-                "date": "2021-01-06T00:00:00",
-                "image": "aHR0cHM6Ly9vcHR5a3duZWNpZS5wbC81NTA4LWxhcmdlX2RlZmF1bHQvb2t1bGFyeS1kby1wbHl3YW5pYS1rb3Jla2N5am5lLWRsYS1kemllY2ktdmlldy5qcGc="
-            },
-            "quantity": 2
-        },
-        {
-            "cartLineId": 0,
-            "product": {
-                "id": 2,
-                "category": 1,
-                "name": "Rękawice bramkarskie",
-                "price": 20.89,
-                "amount": "12",
-                "description": "Do obrony",
-                "code": "44444f",
-                "grade": 3,
-                "date": "2021-01-06T00:00:00",
-                "image": "aHR0cHM6Ly9zcG9rZXkucGwvd3AtY29udGVudC91cGxvYWRzLzIwMTYvMDMvODM4MDQ1LTEwMjR4MTAyNC5qcGc="
-            },
-            "quantity": 2
-        },
-        {
-            "cartLineId": 0,
-            "product": {
-                "id": 3,
-                "category": 3,
-                "name": "Buty do biegania",
-                "price": 150.45,
-                "amount": "12",
-                "description": "Do biegania",
-                "code": "33333r",
-                "grade": 4.5,
-                "date": "2021-01-06T00:00:00",
-                "image": "aHR0cHM6Ly93b2xpbml1c3oucGwvcG9sX3BsX0J1dHktZG8tYmllZ2FuaWEtdy10ZXJlbmllLUFkaWRhcy1URVJSRVgtVFJBSUxNQUtFUi1CQjMzNTgtODg2XzIuanBn"
-            },
-            "quantity": 2
-        }
-    ]
 }
 
 export default Basket

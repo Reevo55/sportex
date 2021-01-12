@@ -1,7 +1,7 @@
 .List {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     overflow-y: auto;
+    max-height: 40rem;
 }

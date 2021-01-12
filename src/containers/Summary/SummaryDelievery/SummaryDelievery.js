@@ -6,29 +6,26 @@ import ListItem from '../../Templates/Lists/ListItem/ListItem'
 import ListInput from '../../Templates/Lists/ListInput/ListInput';
 
 function SummaryDelievery(props) {
+    const handleDelieveryTypes = () => {
+        console.log(props.delieveryTypes)
+        return props.delieveryTypes.map(element => {
+            return (
+                <div className={style.InputContainer} key={element.id}>
+                    <input key={element.Id} className={style.Input} type='radio' id='delievery' name='delievery' value={element.Name} defaultChecked onClick={props.delieveryHandler}></input>
+                    <label className={style.Label} htmlFor='delievery'>{element.Name}</label>
+                </div>
+            )
+        });
+    }
+
     return (
         <form>
             <h1 className={style.Title}>Wprowadź rodzaj dostawy</h1>
 
             <div className={style.List}>
                 <List>
-                    <fieldset onChange={props.delieveryHandler}>
-                        <div className={style.InputContainer}>
-                            <input  className={style.Input} type='radio' id='delievery' name='delievery' value='DPD' defaultChecked></input>
-                            <label   className={style.Label} htmlFor='delievery'>DPD - 15 zł</label>
-                        </div>
-                        <div className={style.InputContainer}>
-                            <input className={style.Input} type='radio' id='delievery' name='delievery' value='PocztaPolska'></input>
-                            <label className={style.Label} htmlFor='delievery'>Poczta Polska - 8 zł</label>
-                        </div>
-                        <div className={style.InputContainer}>
-                            <input className={style.Input} type='radio' id='delievery' name='delievery' value='Paczkomat'></input>
-                            <label className={style.Label} htmlFor='delievery'>Paczkomat - 3 zł</label>
-                        </div>
-                        <div className={style.InputContainer}>
-                            <input className={style.Input} type='radio' id='delievery' name='delievery' value='self'></input>
-                            <label className={style.Label} htmlFor='delievery'>Odbiór własny - 0 zł</label>
-                        </div>
+                    <fieldset>
+                        {handleDelieveryTypes()}
                     </fieldset>
                 </List>
             </div>

@@ -13,7 +13,6 @@ function BasicModal(props) {
                 </div>
             </div>
         </div>
-
     )
 }
 

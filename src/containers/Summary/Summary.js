@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './Summary.module.css'
 import SummaryList from './SummaryList/SummaryList'
 import SummaryInfo from './SummaryInfo/SummaryInfo'
@@ -9,6 +9,8 @@ import SummarySum from './SummarySum/SummarySum';
 import BasicModal from '../Templates/Modals/BasicModal';
 import ButtonLight from '../../components/Button/ButtonLight';
 import CLink from '../../components/Link/CLink';
+import Loading from '../../components/Loading/Loading';
+import axios from 'axios'
 
 function Summary() {
     const components = ['summaryList', 'summaryInfo', 'summaryDelivery', 'summaryPayment', 'summarySum'];
@@ -24,17 +26,41 @@ function Summary() {
         tel: ''
     })
 
-    const [delieveryType, setDelieveryType] = useState('DPD');
-    const [paymentType, setPaymentType] = useState('BLIK');
+    const [delieveryType, setDelieveryType] = useState('CollectionInPerson');
+    const [paymentType, setPaymentType] = useState('Transfer');
 
     const [showModalResponse, setShowModalResponse] = useState(false)
     const [showModalError, setShowModalError] = useState(false)
-    const [orderState, setOrderState] = useState('niepotwierdzone')
+    const [orderState, setOrderState] = useState('potwierdzone')
+
+    const [products, setProducts] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const [delieveryTypes, setDelieveryTypes] = useState([])
+    const [paymentTypes, setPaymentTypes] = useState([])
+
+    useEffect(() => {
+        axios.get('https://localhost:44338/api/Cart/AllCart').then(res => {
+            console.log(res.data.lines)
+            setProducts(res.data.lines);
+            setLoading(false)
+        })
+        axios.get('https://localhost:44338/api/Payment/Types').then(res => {
+            console.log('payment')
+            console.log(res.data)
+            setPaymentTypes(res.data);
+
+        })
+        axios.get('https://localhost:44338/api/Delivery/Types').then(res => {
+            console.log('delievery')
+            console.log(res.data)
+            setDelieveryTypes(res.data);
+        })
+    }, [])
 
     const summaryNextButton = (e) => {
         e.preventDefault()
         let i = index;
-        console.log(i)
         if (i < components.length - 1) {
             i++;
         }
@@ -43,7 +69,6 @@ function Summary() {
     const summaryBackButton = (e) => {
         e.preventDefault()
         let i = index;
-        console.log(i)
         if (i > 0) {
             i--;
         }
@@ -52,13 +77,11 @@ function Summary() {
 
     const delieveryHandler = (e) => {
         console.log(e.target.value)
-
         setDelieveryType(e.target.value)
     }
 
     const paymentHandler = (e) => {
         console.log(e.target.value)
-
         setPaymentType(e.target.value)
     }
 
@@ -68,23 +91,62 @@ function Summary() {
 
     const calculatePrice = () => {
         let sum = 0;
-        apiCart.lines.forEach(item => {
-            sum += item.quantity * item.product.price;
-        });
+        if (products) {
+            products.forEach(item => {
+                sum += item.quantity * item.product.price;
+            });
+        }
 
-        return sum;
+        return sum.toFixed(2);
     }
 
     const finalizeOrderBtnClick = () => {
-        //TODO wyslij date do serwera i ustaw jaki modal
+        const paymentId = paymentTypes.find(elem => elem.Name == paymentType).Id;
+        const delieveryId = delieveryTypes.find(elem => elem.Name == delieveryType).Id;
+        console.log(JSON.stringify(products))
+
+        const data = JSON.stringify({
+            'addres': {
+                "name": delievery.firstname,
+                "surname": delievery.surname,
+                "city": delievery.city,
+                "country": "Polska",
+                "telephone": delievery.tel
+            },
+            'lines': products.map(elem => {
+                return {
+                    'product': elem.product,
+                    'quantity': elem.quantity
+                }
+            }),
+            'delivery': {
+                'deliveryType': delieveryId,
+                'status': 0
+            },
+            'payment': {
+                'paymentType': paymentId,
+                'totalSum': parseFloat(calculatePrice())
+            },
+            "status": "Do realizacji"
+        })
+
+        console.log(data)
+        console.log(paymentId)
+        console.log(delieveryId)
+        axios.post('https://localhost:44338/api/Add/Order', data, { headers: { "Content-Type": "application/json" } }
+        ).then(res => {
+            console.log('Wysłano, otrzymano odp: ')
+            console.log(res)
+
+            axios.delete('api/Cart/Clear');
+        })
 
         setShowModalResponse(true)
     }
 
     const sumInfoNextClick = (e) => {
-        for(const prop in delievery) {
-            if(delievery[prop] === '') 
-            {
+        for (const prop in delievery) {
+            if (delievery[prop] === '') {
                 setShowModalError(true);
                 return false;
             }
@@ -94,8 +156,10 @@ function Summary() {
     }
 
     const summaryComponent = () => {
+        if (loading) return <Loading />
+
         if (components[index] === 'summaryList') {
-            return <SummaryList onclickNext={summaryNextButton} onclickBack={firstBack} cart={apiCart.lines} totalPrice={calculatePrice()} />
+            return <SummaryList onclickNext={summaryNextButton} onclickBack={firstBack} cart={products} totalPrice={calculatePrice()} />
         }
         else if (components[index] === 'summaryInfo') {
             return <SummaryInfo
@@ -107,12 +171,14 @@ function Summary() {
         }
         else if (components[index] === 'summaryDelivery') {
             return <SummaryDelievery
+                delieveryTypes={delieveryTypes}
                 onclickNext={summaryNextButton}
                 onclickBack={summaryBackButton}
                 delieveryHandler={delieveryHandler} />
         }
         else if (components[index] === 'summaryPayment') {
             return <SummaryPayment
+                paymentTypes={paymentTypes}
                 onclickNext={summaryNextButton}
                 onclickBack={summaryBackButton}
                 paymentHandler={paymentHandler} />
@@ -150,7 +216,7 @@ function Summary() {
         }
         else if (orderState == 'potwierdzone') {
             return (
-                <BasicModal title='Zamówienie potwierdzone!' text='Potwierdzenie zostało potwierdzone, pozostaje czekać na zamówienie!'>
+                <BasicModal title='Dziękujemy!' text='Zamówienie zostało potwierdzone, pozostaje czekać na zamówienie!'>
                     <CLink to='/'>MENU GŁÓWNE</CLink>
                 </BasicModal>)
         }
@@ -165,10 +231,10 @@ function Summary() {
             {showModalResponse && currentModal()}
             {
                 showModalError && (
-                <BasicModal title='Informacje niepełne!' text='Uzupełnij wszystkie informacje!'>
-                    <ButtonLight onclick={() => setShowModalError(false)}>OK</ButtonLight>
-                </BasicModal>
-            )}
+                    <BasicModal title='Informacje niepełne!' text='Uzupełnij wszystkie informacje!'>
+                        <ButtonLight onclick={() => setShowModalError(false)}>OK</ButtonLight>
+                    </BasicModal>
+                )}
         </>
     )
 }

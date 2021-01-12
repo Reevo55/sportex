@@ -1,0 +1,37 @@
+.Item {
+    width: 80%;
+    min-height: 8rem;
+    border: 2px solid white;
+    overflow: hidden;
+    color: white;
+    margin: 1rem;
+    overflow: hidden;
+    display: flex;
+    padding: 1rem 5rem;
+    position: relative;
+}
+
+.LeftContainer {
+    width: 70%
+}
+
+.RightContainer { 
+    width: 30%;
+}
+
+.select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    outline: none;
+}
+
+.selected {
+    background-color: #39E991;
+}
+.notSelected {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: white;
+}

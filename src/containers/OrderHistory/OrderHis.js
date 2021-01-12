@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './OrderHis.module.css'
 import Bar from '../Templates/Bar/Bar'
 import List from '../Templates/Lists/List'
 import ItemHistory from '../Templates/Lists/ItemHistory/ItemHistory'
 import OrderItem from './OrderItem.js/OrderItem'
+import axios from 'axios'
 
 function OrderHis() {
     const [showItemComponent, setShowIntemComponent] = useState(false)
     const [currOrderId, setCurrOrderId] = useState()
+    const [history, setHistory] = useState([])
+
 
     const orderClicked = (event, id) => {
         console.log('clicked')
@@ -16,33 +19,59 @@ function OrderHis() {
         setShowIntemComponent(true)
     }
 
+    useEffect(() => {
+        axios.get('https://localhost:44338/api/Orders/client/2').then(
+            res => {
+                console.log(res.data)
+                setHistory(res.data)
+            }
+        )
+    }, [])
+
     const goBack = () => {
         setShowIntemComponent(false)
+    }
+
+    const handleItem = () => {
+        const item = history.find(item => item.orderId == currOrderId);
+
+        if (item != undefined) {
+            return (
+                <OrderItem
+                    title={`Zamówienie nr ${item.orderId}`} desc='Twoje zamówienie' price={item.payment.totalSum} orderId={item.orderId}
+                    orderDate={item.delivery.createDate} adress={item.addres.city + ' ' + item.addres.country} nip='124214125' fullname={item.addres.name + ' ' + item.addres.surname} tel={item.addres.telephone}
+                    paymentType='Transfer' paymentDate={item.payment.dateOfPayment} img={item.lines[0].product.image}
+                    goBack={goBack} products={item.lines}
+                />
+            )
+        }
+        else return <h1>Error</h1>;
+    }
+
+    const handleItems = () => {
+        return history.map(item => {
+            return (
+                <ItemHistory key={item.orderId} id={item.orderId} title={`Zamówienie nr ${item.orderId}`} price={item.payment.totalSum}
+                    desc={'Twoje zamówienie'} img={item.lines[0].product.image}
+                    orderId={item.orderId}
+                    orderDate={item.delivery.createDate}
+                    orderClicked={orderClicked}
+                />
+            )
+        })
     }
 
     const handleContainer = () => {
         if (showItemComponent) {
             return (
-                <OrderItem 
-                    title='NIKE 420' desc='niezłe butki' price='420' orderId='124214' 
-                    orderDate='2450123' adress='Sloneczna 5c/3' nip='124214125' fullname='Radek Karbowiak' tel='777 992 213' 
-                    paymentType='BLIK' paymentDate='25-10-2020' img={'aHR0cHM6Ly9vcHR5a3duZWNpZS5wbC81NTA4LWxhcmdlX2RlZmF1bHQvb2t1bGFyeS1kby1wbHl3YW5pYS1rb3Jla2N5am5lLWRsYS1kemllY2ktdmlldy5qcGc'}
-                    goBack={goBack}
-                />
+                handleItem()
             )
         }
         else {
             return (
-                <div className={style.List}>
-                    <List>
-                        <ItemHistory key={1} id={1} title={'NIKE 420'} price={'499'}
-                            desc={'Niezle butki serio'} img={'aHR0cHM6Ly9vcHR5a3duZWNpZS5wbC81NTA4LWxhcmdlX2RlZmF1bHQvb2t1bGFyeS1kby1wbHl3YW5pYS1rb3Jla2N5am5lLWRsYS1kemllY2ktdmlldy5qcGc'}
-                            orderId={'12312412'}
-                            orderDate={'24-10-2020'}
-                            orderClicked={orderClicked}
-                             />
-                    </List>
-                </div>
+                <List>
+                    {handleItems()}
+                </List>
             )
         }
     }

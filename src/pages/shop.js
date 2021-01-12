@@ -9,6 +9,7 @@ import axios from 'axios';
 import boots from '../res/img/boot.png';
 import ToCart from '../components/ToCart/ToCart';
 import CLink from '../components/Link/CLink';
+import Loading from '../components/Loading/Loading';
 
 function Shop(props) {
     const [loading, setLoading] = useState(true)
@@ -85,7 +86,7 @@ function Shop(props) {
         e.cancelBubble = true;
         e.stopPropagation();
 
-        // axios.post('https://localhost:44338/api/Cart/AddProduct/1' + productId);
+        axios.post('https://localhost:44338/api/Cart/AddProduct/' + productId);
 
         alert("Product added!")
     }
@@ -221,7 +222,7 @@ function Shop(props) {
         let result;
 
         if (loading) {
-            result = 'Loading...'
+            result = <Loading />
         }
         else {
             result = productViewState == false ? catalogView() : productView()

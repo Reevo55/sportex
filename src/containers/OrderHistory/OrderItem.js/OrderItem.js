@@ -5,7 +5,7 @@ import Img64 from '../../../components/Img64/Img64'
 import style from './OrderItem.module.css'
 import { FaBackspace } from "react-icons/fa";
 
-function OrderItem({title, desc, price, orderId, orderDate, adress, nip, fullname, tel, paymentType, paymentDate, img, goBack}) {
+function OrderItem({title, desc, price, orderId, orderDate, adress, nip, fullname, tel, paymentType, paymentDate, img, goBack, products}) {
     const orderAgain = () => {
         // ZAMÓW JESZCZE RAZ
     } 
@@ -41,6 +41,10 @@ function OrderItem({title, desc, price, orderId, orderDate, adress, nip, fullnam
                     <h1 className={style.Info}>Płatność</h1>
                     <p className={style.Text}>Zapłacono: {paymentType}</p>
                     <p className={style.Text}>Data opłacenia: {paymentDate}</p>
+                    <h2 className={style.Info}> Kupione rzeczy: </h2>
+                    { products.map(item => { 
+                        return <p>Nazwa: {item.product.name}, {item.quantity} sztuk.</p>
+                    })}
                 </div>
             </div>
             

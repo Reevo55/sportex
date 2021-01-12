@@ -13,7 +13,6 @@ function ItemHistory(props) {
                     <h2 className={style.Price}>{props.price} zł</h2>
                 </div>
 
-                <h4 className={style.Desc}>{props.desc}</h4>
                 <h4 className={style.OrderId}>Nr zamówienia: {props.orderId}</h4>
                 <h4 className={style.OrderDate}>Data zamówienia: {props.orderDate}</h4>
 

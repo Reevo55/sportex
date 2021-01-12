@@ -50,7 +50,13 @@
     bottom: 5%;
 }
 
+.Label
+{
+    margin: 1rem 2rem; 
+}
+
 .InputQuantity {
-    margin-right: 2rem;
+    margin-right: .2rem;
+    margin-left: .2rem;
     font-size: 1.5rem;
 }
