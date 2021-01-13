@@ -20,10 +20,7 @@ function EmployeeC() {
 
 
     useEffect(() => {
-        axios.get('https://localhost:44338/api/ConsumerComplaint/Employee/1').then(res => {
-            console.log(res.data)
-            setComplaints(res.data)
-        })
+        fetchRes()
         axios.get('https://localhost:44338/api/ConsumerComplaint/Statuses').then(res => {
             console.log(res.data)
             setStatuses(res.data)
@@ -35,7 +32,7 @@ function EmployeeC() {
             return ''
         }
         else if (currentComponent == 'waitingComplaints') {
-            return <WaitingComplaints complaints={complaints.filter(item => item.status == WAITING_STATUS)}/>
+            return <WaitingComplaints fetch={fetchRes} complaints={complaints.filter(item => item.status == WAITING_STATUS)}/>
         }
         else if (currentComponent == 'positiveComplaints') {
             return <PositiveComplaints complaints={complaints.filter(item => item.status == ACCEPTED_STATUS)}/>
@@ -50,6 +47,14 @@ function EmployeeC() {
 
     const changeComponent = (component) => {
         setCurrentComponent(component)
+    }
+
+    const fetchRes = () => {
+        axios.get('https://localhost:44338/api/ConsumerComplaint/Employee/1').then(res => {
+            console.log('Z FETCH RESA')
+            console.log(res.data)
+            setComplaints(res.data)
+        })
     }
 
     return (

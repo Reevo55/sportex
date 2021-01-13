@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import List from '../../Templates/Lists/List'
 import ComplaintItem from '../ComplaintItem/ComplaintItem'
 import style from '../Complaint.module.css'
@@ -25,12 +25,18 @@ function WaitingComplaints(props) {
         setShowItem(true)
     }
 
+    useEffect(() => {
+        props.fetch()
+    },[showItem, openConfirmationModal])
+    
     const acceptComplaint = () => {
         setOpenConfirmationModal(true)
-
         const accept = () => {
             axios.post(`api/ConsumerComplaint/${currItem}/${1}`).then(
-                res => console.log(res)
+                res => {
+                    props.fetch()
+                    setShowItem(false)
+                }
             )
             setOpenConfirmationModal(false)
         }
@@ -50,10 +56,12 @@ function WaitingComplaints(props) {
 
     const rejectComplaint = () => {
         setOpenConfirmationModal(true)
-
         const reject = () => {
             axios.post(`api/ConsumerComplaint/${currItem}/${2}`).then(
-                res => console.log(res)
+                res => {
+                    props.fetch()
+                    setShowItem(false)
+                }
             )
             setOpenConfirmationModal(false)
 
@@ -70,6 +78,7 @@ function WaitingComplaints(props) {
         )
 
         setCurrModal(modal)
+        props.fetch()
     }
 
     const itemHandler = () => {

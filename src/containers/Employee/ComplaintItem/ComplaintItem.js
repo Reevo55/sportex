@@ -8,7 +8,6 @@ function ComplaintItem(props) {
             <div className={style.LeftContainer}>
                 <h2>Nr: {props.id}</h2>
                 <p>Data: {props.date}</p>
-                <p>Status: {props.status}</p>
             </div>
             <div className={style.RightContainer}>
                 <h2>Kwota: {props.price} zł</h2>

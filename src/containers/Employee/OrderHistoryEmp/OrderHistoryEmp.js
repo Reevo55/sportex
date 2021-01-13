@@ -23,12 +23,18 @@ function OrderHistoryEmp() {
     const manageStatus = () => {
         setOpenConfirmationModal(true)
 
-        const reject = () => {
-            axios.post(`api/Order/Status/${currItem}/${'Do wyslania'}`).then(
-                res => console.log(res)
+        const changeStatus = () => {
+            const order = inPreperation.find(item => item.orderId == currItem);
+
+            axios.post(`api/Order/Status/${currItem}/${order.status == 'Do realizacji' ? 'Do wysłania' : 'Wyślij'}`).then(
+                res => {
+                    console.log(res)
+                    fetchOrders()
+                    setShowItem(false);
+                }
             )
             setOpenConfirmationModal(false)
-
+            
         }
 
         const modal = (
@@ -36,7 +42,7 @@ function OrderHistoryEmp() {
                 title={'Jesteś pewny?'}
                 text={'To twoja ostatnia szansa!'}
             >
-                <ButtonLight onclick={reject}>OK</ButtonLight>
+                <ButtonLight onclick={changeStatus}>OK</ButtonLight>
                 <ButtonLight onclick={() => setOpenConfirmationModal(false)} >WRACAM</ButtonLight>
             </BasicModal>
         )
@@ -55,19 +61,25 @@ function OrderHistoryEmp() {
                     lines={order.lines}
                     item = {{order}}
                     id = {order.orderId}>
-                        <ButtonLight onclick={manageStatus}>Ustaw: Do wysłania</ButtonLight>
+                        {order.status != 'Wyślij' && <ButtonLight onclick={manageStatus}>Ustaw: {order.status == 'Do realizacji' ? 'Do wysłania' : 'Wyślij'}</ButtonLight>}
                 </FullItem>)
         }
     }
 
     useEffect(() => {
+        fetchOrders();
+    }, [])
+
+
+    const fetchOrders = () => {
         axios.get('api/Orders').then(res => {
-            const ordersInPreparation = res.data.filter(item => item.status == 'Do realizacji')
+            const ordersInPreparation = res.data
+            console.log('robie sie')
             console.log(ordersInPreparation);
 
             setInPreperation(ordersInPreparation)
         })
-    }, [])
+    }
 
     const openItem = (id) => {
         setCurrItem(id)
@@ -82,6 +94,7 @@ function OrderHistoryEmp() {
                 date={item.delivery.createDate}
                 price={item.payment.totalSum}
                 onclick={() => openItem(item.orderId)}
+                status={item.status}
             ></ProductItem>
         })
     }

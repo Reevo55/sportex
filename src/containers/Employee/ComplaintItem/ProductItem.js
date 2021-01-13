@@ -8,6 +8,7 @@ function ProductItem(props) {
             <div className={style.LeftContainer}>
                 <h2>Nr zamówienia: {props.orderId}</h2>
                 <p>Data zamówienia: {props.date} </p>
+                <p>Status: {props.status} </p>
             </div>
             <div className={style.RightContainer}>
                 <h2>Kwota: {props.price} zł </h2>
