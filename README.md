@@ -1,4 +1,4 @@
-# Projekt stworzony na zajęcia - Projektowanie Oprogramowania
+# Sportex
 
 Front-end stworzony na potrzeby sklepu internetowego - Sportex. Wykorzystujemy komunikację API pomiędzy frontendem i backendem. Zostały w nim zaimplementowane przypadki użycia wybrane przez prowadzącego. Działanie sklepu: https://youtu.be/ICoq4dvuRxQ
 
